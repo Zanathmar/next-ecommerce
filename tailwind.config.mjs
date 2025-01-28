@@ -7,9 +7,13 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        teko: ["Teko", "serif"],
+        poppins: ["Poppins", "serif"],
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        light: "#fbfaf0",
+        dark: "#1e2b3a",
       },
     },
   },
