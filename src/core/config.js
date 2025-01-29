@@ -1,5 +1,5 @@
 class Config {
-    static appName = () => "L'MAGER - 메이거";
+    static appName = () => "LOM.SHOOPE - 메이거";
     static baseApiUrl = () => "/////";
     static baseApiUrl = () => this.baseUrl () + "api/";
 }
