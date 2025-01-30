@@ -11,7 +11,7 @@ export default function Login() {
   return (
     <div className="flex h-screen">
       <LogineForm />
-      <Image src="/img1.jpg" alt="Login" width={400} height={500} />
+      <Image src="/lomk.png" alt="Login" width={960} height={100} />
     </div>
   );
 }

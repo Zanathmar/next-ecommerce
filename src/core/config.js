@@ -1,7 +1,7 @@
 class Config {
-    static appName = () => "LOM.SHOOPE - 메이거";
-    static baseApiUrl = () => "/////";
-    static baseApiUrl = () => this.baseUrl () + "api/";
+    static appName = () => process.env.NEXT_PUBLIC_APP_NAME;
+    static baseUrl = () => process.env.BASE_URL;
+    static baseApiUrl = () => this.baseUrl() + "api/";
 }
 
 export default Config;

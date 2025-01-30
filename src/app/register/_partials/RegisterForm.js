@@ -8,11 +8,17 @@ import { useState } from "react";
 import { BiSolidHide } from "react-icons/bi";
 import { IoMdEye } from "react-icons/io";
 
-export default function LogineForm() {
+export default function RegisterForm() {
     const [obscurePassword, setObscurePassword] = useState(true);
 
     const toggleObcurePassword = () => {
         setObscurePassword(!obscurePassword);
+    };
+
+    const [ConfirmPassword, setConfirmPassword] = useState(true);
+
+    const toggleConfirmPassword = () => {
+        setConfirmPassword(!ConfirmPassword);
     };
 
   return (
@@ -28,8 +34,16 @@ export default function LogineForm() {
 
         <span className="font-teko text-4x1 font-bold">{Config.appName()}</span>
       </Link>
-      <div className="h-px w-1/2 bg-black"></div>
-      <h1 className="text-2x1 font-bold">Login</h1>
+      <div className="h-px w-2/3 bg-black"></div>
+      <h1 className="text-3x1 font-bold">Register</h1>
+      <CustomInput
+        type="name"
+        id="name"
+        name="name"
+        placeholder="Enter your Nikname/Full Namel!!..."
+        required={true}
+        className={"w-2/3"}
+      />
       <CustomInput
         type="email"
         id="email"
@@ -41,8 +55,8 @@ export default function LogineForm() {
       <div className="w-2/3 relative">
       <CustomInput
         type={obscurePassword ? "password" : "text"}
-        id="password"
-        name="password"
+        id="confirmpassword"
+        name="confirmpassword"
         placeholder="Enter your password!!..."
         required={true}
         className={"w-full"}
@@ -55,14 +69,33 @@ export default function LogineForm() {
         {obscurePassword ? "Show" : "Hide"}
         </button>
         </div>
+
+        <div className="w-2/3 relative">
+      <CustomInput
+        type={ConfirmPassword ? "password" : "text"}
+        id="password"
+        name="password"
+        placeholder="Confirm your Password!!..."
+        required={true}
+        className={"w-full"}
+        />
+        <button
+          type="button"
+          className="absolute top-1/2 right-4 -translate-y-1/2"
+          onClick={toggleConfirmPassword}
+        >
+        {ConfirmPassword ? "Show" : "Hide"}
+        </button>
+        </div>
+
       <FilledButton type="submit" className={"w-2/3"}>
         Login
       </FilledButton>
       <p className="text-sm">
-        Don&apos;t have an account?{" "}
-        <Link href="/register" className="font-semibold hover:underline">
+        Do you have an account?{" "}
+        <Link href="/login" className="font-semibold hover:underline">
           {" "}
-          Register{" "}
+          Login{" "}
         </Link>
       </p>
     </form>
