@@ -8,12 +8,19 @@ import { useState } from "react";
 import { CiCircleAlert } from "react-icons/ci";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { IoMdLogIn } from "react-icons/io";
+import { CgPassword } from "react-icons/cg";
 
 export default function RegisterForm() {
   const [obscurePassword, setObscurePassword] = useState(true);
   const [ConfirmPassword, setConfirmPassword] = useState(true);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [formData, setForData] = useState({
+    name: "",
+    email: "",
+    CgPassword: "",
+    ConfirmPassword: "",
+  });
 
   const toggleObcurePassword = () => {
     setObscurePassword(!obscurePassword);
@@ -26,8 +33,14 @@ export default function RegisterForm() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    
-  }
+    try {
+
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <form className="w-full md:w-3/4 flex flex-col justify-center items-center gap-4">
@@ -54,6 +67,8 @@ export default function RegisterForm() {
         type="name"
         id="name"
         name="name"
+        onChange={(e) => setForData({ ...formData, name:e.target.value})}
+        value={formData.name}
         placeholder="Enter your Nikname/Full Namel!!..."
         required={true}
         className={"w-2/3"}
@@ -62,6 +77,8 @@ export default function RegisterForm() {
         type="email"
         id="email"
         name="email"
+        onChange={(e) => setForData({ ...formData, name:e.target.value})}
+        value={formData.name}
         placeholder="Enter your Email!!..."
         required={true}
         className={"w-2/3"}
@@ -71,6 +88,8 @@ export default function RegisterForm() {
           type={obscurePassword ? "password" : "text"}
           id="confirmpassword"
           name="confirmpassword"
+          onChange={(e) => setForData({ ...formData, name:e.target.value})}
+          value={formData.name}
           placeholder="Enter your password!!..."
           required={true}
           className={"w-full"}
@@ -89,6 +108,8 @@ export default function RegisterForm() {
           type={ConfirmPassword ? "password" : "text"}
           id="password"
           name="password"
+          onChange={(e) => setForData({ ...formData, name:e.target.value})}
+          value={formData.name}
           placeholder="Confirm your Password!!..."
           required={true}
           className={"w-full"}
