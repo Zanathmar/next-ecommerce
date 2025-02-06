@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -21,11 +21,25 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState([]);
+  const categoryRef = useRef(null);
 
+  // Handle clicks outside of category dropdown
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (categoryRef.current && !categoryRef.current.contains(event.target)) {
+        setCategoryOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(Config.baseApiUrl() + "category", {
+        const response = await fetch (Config.baseApiUrl() + "category", {
           headers: {
             "x-api-key": process.env.NEXT_PUBLIC_API_KEY,
           },
@@ -39,6 +53,8 @@ export default function Navbar() {
 
     fetchCategories();
   }, []);
+
+  
 
   return (
     <header className="w-full bg-light shadow sticky top-0 z-50">
@@ -91,17 +107,17 @@ export default function Navbar() {
 
       {/* Mobile Search Bar */}
       <div className="md:hidden px-4 py-2">
-       <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden    w-full">
-        <input
-         type="text"
-         placeholder="Search products"
-         className="w-full px-4 py-2 outline-none bg-light rounded-l-lg"
-         value={searchQuery}
-         onChange={(e) => setSearchQuery(e.target.value)}
-         />
-      <button className="px-4 py-2 bg-primary mr-1 text-light hover:bg-black transition-colors rounded-r-lg">
-      <FaSearch />
-      </button>
+        <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden w-full">
+          <input
+            type="text"
+            placeholder="Search products"
+            className="w-full px-4 py-2 outline-none bg-light rounded-l-lg"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button className="px-4 py-2 bg-primary mr-1 text-light hover:bg-black transition-colors rounded-r-lg">
+            <FaSearch />
+          </button>
         </div>
       </div>
 
@@ -122,8 +138,8 @@ export default function Navbar() {
         </Link>
 
         <button
-          onClick={setOpen}
-          className="flex items-center gap-2 px-4 py-3 border-b hover:bg-gray-100"
+          onClick={() => setOpen(!open)}
+          className="flex items-center gap-2 px-4 py-3 border-b hover:bg-gray-100 w-full text-left"
         >
           <FaUser className="text-xl" />
           Account
@@ -132,29 +148,30 @@ export default function Navbar() {
 
       {/* Category Dropdown (Desktop) */}
       <div className="hidden md:flex items-center px-4 py-2 text-sm text-text border-t border-input">
-        <button
-          onClick={() => setCategoryOpen(!categoryOpen)}
-          className="flex items-center gap-2 hover:text-primary transition"
-        >
-          <span>Category</span>
-          <FaChevronDown className={`text-sm transition-transform duration-200 ${categoryOpen ? "rotate-180" : ""}`} />
-        </button>
+        <div className="relative" ref={categoryRef}>
+          <button
+            onClick={() => setCategoryOpen(!categoryOpen)}
+            className="flex items-center gap-2 hover:text-primary transition"
+          >
+            <span>Category</span>
+            <FaChevronDown className={`text-sm transition-transform duration-200 ${categoryOpen ? "rotate-180" : ""}`} />
+          </button>
 
-        {categoryOpen && (
-          <div className="absolute top-full left-0 mt-2 bg-white shadow-lg rounded-lg w-48 py-2 z-40">
-            {categories.map((category) => (
-              <Link
-                key={category.name}
-                href={`/category/${category.name}`}
-                className="block px-4 py-2 hover:bg-gray-100 text-text transition"
-              >
-                {category.name}
-                
-              </Link>
-              
-            ))}
-          </div>
-        )}
+          {categoryOpen && (
+            <div className="absolute top-full left-0 mt-2 bg-white shadow-lg rounded-lg w-48 py-2 z-40">
+              {categories.map((category) => (
+                <Link
+                  key={category.name}
+                  href={`/category/${category.name}`}
+                  className="block px-4 py-2 hover:bg-gray-100 text-text transition"
+                  onClick={() => setCategoryOpen(false)}
+                >
+                  {category.name}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
 
         <div className="flex items-center gap-2 ml-6">
           <FaMapMarkerAlt />

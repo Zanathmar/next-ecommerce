@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+
 export default function CategoryCard({ name, image, href }) {
     return (
          <Link href={href} className="aspect-[4/5] relative group">

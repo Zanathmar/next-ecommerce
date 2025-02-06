@@ -7,7 +7,8 @@ export default async function CategorySection() {
             "x-api-key": process.env.API_KEY,
         }
     }).then((res) => res.json())
-    // console.log(data);
+
+
     return(
     <section className="py-6">
       <h2 className="text-2xl font-bold text-center uppercase mb-4">Categories</h2>

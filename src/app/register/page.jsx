@@ -3,7 +3,7 @@ import RegisterForm from "./_partials/RegisterForm";
 
 
 export const metadata = {
-  title: "register",
+  title: "Register",
 };
 
 export default function Register() {
