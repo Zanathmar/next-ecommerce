@@ -17,7 +17,9 @@ export default function CustomInput({
       value={value}
       placeholder={placeholder}
       required={required}
-      className={"border border-black py-2 px-4 rounded-md bg-white/50  " + className}
+      className={
+        "border border-dark py-2 px-4 rounded-md bg-white/50 " + className
+      }
     />
   );
 }
