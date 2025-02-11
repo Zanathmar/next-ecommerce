@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -39,7 +39,7 @@ export default function Navbar() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch (Config.baseApiUrl() + "category", {
+        const response = await fetch(Config.baseApiUrl() + "category", {
           headers: {
             "x-api-key": process.env.NEXT_PUBLIC_API_KEY,
           },
@@ -54,15 +54,13 @@ export default function Navbar() {
     fetchCategories();
   }, []);
 
-  
-
   return (
     <header className="w-full bg-light shadow sticky top-0 z-50">
       <div className="flex items-center justify-between px-4 py-2 md:py-3">
         {/* Left Side (Logo & Mobile Menu) */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/icon.svg" alt="Logo" width={100} height={100} className="w-8" />
+            <Image src="/Logo.png" alt="Logo" width={100} height={100} className="w-8" />
             <span className="font-poppins text-xl font-bold text-primary">{Config.appName()}</span>
           </Link>
           <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden text-xl absolute right-4">
@@ -72,7 +70,7 @@ export default function Navbar() {
 
         {/* Center (Search Bar) */}
         <div className="hidden md:flex flex-grow max-w-lg">
-          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden w-full">
+          <div className="flex items-center border border-gray-300 rounded-full overflow-hidden w-full">
             <input
               type="text"
               placeholder="Search products"
@@ -80,7 +78,7 @@ export default function Navbar() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button className="px-4 py-2 bg-primary rounded-r-lg mr-1 text-light hover:bg-black transition-colors">
+            <button className="px-4 py-2 bg-primary rounded-r-full mr-1 text-light hover:bg-black transition-colors">
               <FaSearch />
             </button>
           </div>
@@ -107,7 +105,7 @@ export default function Navbar() {
 
       {/* Mobile Search Bar */}
       <div className="md:hidden px-4 py-2">
-        <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden w-full">
+        <div className="flex rounded-full items-center border border-gray-300 overflow-hidden w-full">
           <input
             type="text"
             placeholder="Search products"
@@ -115,7 +113,7 @@ export default function Navbar() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <button className="px-4 py-2 bg-primary mr-1 text-light hover:bg-black transition-colors rounded-r-lg">
+          <button className="px-4 py-2 bg-primary mr-1 text-light hover:bg-black transition-colors rounded-r-full">
             <FaSearch />
           </button>
         </div>
@@ -147,8 +145,8 @@ export default function Navbar() {
       </div>
 
       {/* Category Dropdown (Desktop) */}
-      <div className="hidden md:flex items-center px-4 py-2 text-sm text-text border-t border-input">
-        <div className="relative" ref={categoryRef}>
+      <div className="hidden md:flex items-center px-4 py-2 text-sm text-text border-t border-input relative">
+        <div ref={categoryRef}>
           <button
             onClick={() => setCategoryOpen(!categoryOpen)}
             className="flex items-center gap-2 hover:text-primary transition"
@@ -158,17 +156,20 @@ export default function Navbar() {
           </button>
 
           {categoryOpen && (
-            <div className="absolute top-full left-0 mt-2 bg-white shadow-lg rounded-lg w-48 py-2 z-40">
-              {categories.map((category) => (
-                <Link
-                  key={category.name}
-                  href={`/category/${category.name}`}
-                  className="block px-4 py-2 hover:bg-gray-100 text-text transition"
-                  onClick={() => setCategoryOpen(false)}
-                >
-                  {category.name}
-                </Link>
-              ))}
+            <div className="absolute left-0 mt-2 bg-white shadow-lg rounded-lg w-48 py-2 z-40">
+              {categories.length > 0 ? (
+                categories.map((category) => (
+                  <Link
+                    key={category.name}
+                    href={`/category/${category.name}`}
+                    className="block px-4 py-2 hover:bg-gray-100 text-text transition"
+                  >
+                    {category.name}
+                  </Link>
+                ))
+              ) : (
+                <div className="px-4 py-2 text-gray-500">No categories</div>
+              )}
             </div>
           )}
         </div>
@@ -186,22 +187,12 @@ export default function Navbar() {
           open ? "opacity-100 scale-y-100" : "opacity-0 scale-y-0 pointer-events-none"
         }`}
       >
-        <Link href="/login" className="px-4 py-2 hover:bg-gray-100 text-text">
-          Login
-        </Link>
-        <Link href="/register" className="px-4 py-2 hover:bg-gray-100 text-text">
-          Register
-        </Link>
+        <Link href="/login" className="px-4 py-2 hover:bg-gray-100 text-text">Login</Link>
+        <Link href="/register" className="px-4 py-2 hover:bg-gray-100 text-text">Register</Link>
         <div className="border-t border-gray-200 my-1"></div>
-        <Link href="/profile" className="px-4 py-2 hover:bg-gray-100 text-text">
-          Profile
-        </Link>
-        <Link href="/order" className="px-4 py-2 hover:bg-gray-100 text-text">
-          My Orders
-        </Link>
-        <button className="px-4 py-2 text-left hover:bg-gray-100 text-red-500">
-          Logout
-        </button>
+        <Link href="/profile" className="px-4 py-2 hover:bg-gray-100 text-text">Profile</Link>
+        <Link href="/order" className="px-4 py-2 hover:bg-gray-100 text-text">My Orders</Link>
+        <button className="px-4 py-2 text-left hover:bg-gray-100 text-red-500">Logout</button>
       </div>
     </header>
   );

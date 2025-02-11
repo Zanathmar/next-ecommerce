@@ -53,7 +53,7 @@ export default function ProductCard({ href, image, category, name, rating, price
 
           {/* Rating (if available) */}
           {rating && (
-            <Box display="flex" alignItems="center" mt={1} color="yellow.500">
+            <Box display="flex" alignItems="center" mt={1} color="gold">
               <MdOutlineStar style={{ marginRight: 4 }} />
               <Typography variant="body2" fontWeight="bold">
                 {rating}

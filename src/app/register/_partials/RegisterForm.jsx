@@ -4,10 +4,9 @@ import FilledButton from "@/components/FilledButton";
 import Config from "@/core/config";
 import Image from "next/image";
 import Link from "next/link";
-import { use, useState } from "react";
+import { useState } from "react";
 import { RiLoginCircleFill } from "react-icons/ri";
-import { IoMdEyeOff } from "react-icons/io";
-import { IoMdEye } from "react-icons/io";
+import { IoMdEyeOff, IoMdEye } from "react-icons/io";
 import { FiAlertCircle } from "react-icons/fi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useRouter } from "next/navigation";
@@ -15,49 +14,58 @@ import { useRouter } from "next/navigation";
 export default function RegisterForm() {
   const router = useRouter();
   const [obscurePassword, setObscurePassword] = useState(true);
-  const [obscureconfirmPassword, setObscureconfirmPassword] = useState(true);
+  const [obscureConfirmPassword, setObscureConfirmPassword] = useState(true);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [ formData, setFormData ] = useState({
+  const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
 
-  const toggleObscurePassword = () => {
-    setObscurePassword(!obscurePassword);
-  };
-
-  const toggleObscureconfirmPassword = () => {
-    setObscureconfirmPassword(!obscureconfirmPassword);
-  };
+  const toggleObscurePassword = () => setObscurePassword(!obscurePassword);
+  const toggleObscureConfirmPassword = () => setObscureConfirmPassword(!obscureConfirmPassword);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    try {
-      // console.log(formData);
-      if (formData.password !== formData.confirmPassword) {
-        throw new Error("password and confirm password doesn't match");
-      }
+    //  Added Basic Validation Before API Call
+    if (!formData.name || !formData.email || !formData.password || !formData.confirmPassword) {
+      setError("All fields are required!");
+      setLoading(false);
+      return;
+    }
 
-      const res = await fetch(Config.baseApiUrl() + "Register", {
+    if (formData.password !== formData.confirmPassword) {
+      setError("Password and confirm password do not match.");
+      setLoading(false);
+      return;
+    }
+    // console.log(formData);
+    try {
+      const res = await fetch(Config.baseApiUrl() + "register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": process.env.NEXT_PUBLIC_API_KEY,
+          "x-api-key": process.env.NEXT_PUBLIC_API_KEY || "", // ✅ Prevent undefined API key
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }),
       });
 
       const result = await res.json();
-      if (!res.ok) {
-        throw new Error(result.message);
-      } 
 
+      if (!res.ok) {
+        throw new Error(result.message || "Registration failed!");
+      }
+
+      //  Reset Form After Successful Registration
       setFormData({
         name: "",
         email: "",
@@ -65,7 +73,7 @@ export default function RegisterForm() {
         confirmPassword: "",
       });
 
-      localStorage.setItem("token", result.data.token);
+      localStorage.setItem("token", result.data?.token);
       router.push("/");
 
     } catch (error) {
@@ -93,13 +101,13 @@ export default function RegisterForm() {
       )}
 
       <CustomInput
-        type="name"
+        type="text"
         id="name"
         name="name"
         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         value={formData.name}
         placeholder="Enter your username"
-        required={true}
+        required
         className={"w-2/3"}
       />
 
@@ -110,7 +118,7 @@ export default function RegisterForm() {
         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
         value={formData.email}
         placeholder="Enter your email"
-        required={true}
+        required
         className={"w-2/3"}
       />
 
@@ -122,7 +130,7 @@ export default function RegisterForm() {
           onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           value={formData.password}
           placeholder="Enter your password"
-          required={true}
+          required
           className={"w-full"}
         />
         <button
@@ -136,21 +144,21 @@ export default function RegisterForm() {
 
       <div className="w-2/3 relative">
         <CustomInput
-          type={obscureconfirmPassword ? "password" : "text"}
-          id="password"
-          name="password"
+          type={obscureConfirmPassword ? "password" : "text"}
+          id="confirmPassword"
+          name="confirmPassword"
           onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
           value={formData.confirmPassword}
-          placeholder="Verified your password"
-          required={true}
+          placeholder="Verify your password"
+          required
           className={"w-full"}
         />
         <button
           type="button"
           className="absolute top-1/2 right-4 -translate-y-1/2"
-          onClick={toggleObscureconfirmPassword}
+          onClick={toggleObscureConfirmPassword}
         >
-          {obscureconfirmPassword ? <IoMdEye /> : <IoMdEyeOff />}
+          {obscureConfirmPassword ? <IoMdEye /> : <IoMdEyeOff />}
         </button>
       </div>
 
@@ -159,15 +167,15 @@ export default function RegisterForm() {
         className={"w-2/3 disabled:bg-opacity-70"}
         disabled={loading}
       >
-        Register
+        {loading ? <AiOutlineLoading3Quarters className="animate-spin" /> : "Register"}
       </FilledButton>
 
       <p className="text-sm">
-        don&apos;t have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link href="/login">
           <span className="font-bold text-yellow-600">Login</span>
         </Link>
       </p>
     </form>
   );
-}
+};

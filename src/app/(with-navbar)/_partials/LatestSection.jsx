@@ -5,10 +5,9 @@ export default async function LatestSection() {
     const data = await fetch(Config.baseApiUrl() + "product?sortBy=created_at&order=desc", {
         headers: {
             "x-api-key": process.env.API_KEY,
-        },
-        method: "GET",
+        }
     }).then((res) => res.json())
-    console.log(data);
+    // console.log(data);
 
     return(
         <section className="p-6 bg-dark text-white">
@@ -19,7 +18,7 @@ export default async function LatestSection() {
                 {data.data.map((product) => (
                     <ProductCard 
                     key={product.name}
-                    href={"`/product/${product.slug}`"}
+                    href={`/product/${product.slug}`}
                     image={Config.baseUrl() + product.img_urls[0]}
                     name={product.name}
                     category={product.category_name}

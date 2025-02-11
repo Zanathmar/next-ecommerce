@@ -7,7 +7,7 @@ export default async function CategorySection() {
             "x-api-key": process.env.API_KEY,
         }
     }).then((res) => res.json())
-
+    // console.log(data);
 
     return(
     <section className="py-6">

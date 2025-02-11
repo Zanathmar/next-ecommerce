@@ -10,7 +10,7 @@ export default function Footer() {
         {/* Company Info */}
         <div>
           <Link href="/" className="flex items-center gap-2">
-            <Image src="/icon.svg" alt="GoShop Logo" width={40} height={40} />
+            <Image src="/Logo.png" alt="GoShop Logo" width={40} height={40} />
             <span className="text-2xl font-bold text-white">GoShop</span>
           </Link>
           <p className="mt-3 text-sm">Your trusted eCommerce platform for quality products and fast delivery.</p>
